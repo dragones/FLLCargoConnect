@@ -114,10 +114,26 @@ motor_r_reset()
 gyro_reset()
 timer.reset()
 
-while timer.now()<1: #start slow so wheels don't spin
-    gyro_follower(0,6,40)
-while get_motor_r()<725: #speed up
-    gyro_follower(0,6,60)
+#while timer.now()<1: #start slow so wheels don't spin
+    #gyro_follower(0,6,40)
+while get_motor_r()<540:
+    gyro_follower(0,6,20)
+
+while get_motor_r()<720:
+    line_follower(55,.3,20,'right','right')
+while get_motor_r()<1300:
+    gyro_follower(0,6,20)
+
+while get_motor_r()<2180:
+    line_follower(55,.3,20,'right','right')
+while get_motor_r()<2450:
+    gyro_follower(0,6,20)
 motor_l_r.stop()
 
-# line_follower(55,.3,50,'right','left')
+motor_front.set_degrees_counted(0)
+motor_front.run_for_degrees(100, 10)
+wait_for_seconds(1)
+
+# back to base
+#while get_motor_r()<2000:
+gyro_follower(0,6,-20)
