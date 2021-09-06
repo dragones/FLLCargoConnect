@@ -1,0 +1,146 @@
+# imports -------------------------------------------------------------------------
+
+from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+from spike.control import wait_for_seconds, wait_until, Timer
+from spike.operator import less_than
+from spike.operator import greater_than
+
+# variables -----------------------------------------------------------------------
+
+hub = PrimeHub()
+motor_l_r = MotorPair('C','D')
+motor_r = Motor('D')
+motor_l = Motor('C')
+motor_front = Motor('E')
+color_r = ColorSensor('B')
+color_l = ColorSensor('A')
+motor_rear = Motor('F')
+timer = Timer()
+
+# functions -----------------------------------------------------------------------
+
+def gyro_follower(target, k, power):
+    # gets the current yaw angle
+    degrees = hub.motion_sensor.get_yaw_angle()
+    # makes the error variable
+    error = target - degrees
+    # making the steering correction
+    steering = int(error*k)
+    # makes sure the robot stays on the threshold
+    motor_l_r.start_at_power(power,steering)
+
+def rev_gyro_follower(target, k, power):
+    # gets the current yaw angle
+    degrees =hub.motion_sensor.get_yaw_angle()
+    # makes the error variable
+    error =degrees-target
+    # making the steering correction
+    steering = int(error*k)
+    # makes sure the robot stays on the threshold
+    motor_l_r.start_at_power(power,steering)
+
+def line_follower(target, k, power, sensor, side):
+    # gets the current reflected light
+    if sensor == 'right': #chooses right color sensor
+        light =color_r.get_reflected_light()
+    elif sensor == 'left': #chooses left color sensor
+        light =color_l.get_reflected_light()
+    # makes the error variable
+    if side == 'left': # chooses left side of black line
+        error =target-light
+    elif side == 'right': #chooses right side of black line
+        error = light-target
+    # makes the steering correction
+    correction = int(error*k)
+    # steers the robot toward the target
+    right_power=power+correction
+    left_power=power-correction
+    motor_l_r.start_tank_at_power(left_power,right_power)
+
+def turn_right(target_angle, power, turn_type):
+    # make the gyro angle variables that checks the gyro angle
+    gyro_angle1= hub.motion_sensor.get_yaw_angle()
+    gyro_angle2= hub.motion_sensor.get_yaw_angle()
+    # start turn loop
+    while gyro_angle2 < gyro_angle1+target_angle:
+        if turn_type == 'pivot': #chooses pivot turn
+            motor_l_r.start_tank_at_power(power,0)
+        elif turn_type == 'zero': #chooses zero point turn
+            motor_l_r.start_tank_at_power(power,-1*power)
+        # checks gyro angle and sets it to the current one
+        gyro_angle2 = hub.motion_sensor.get_yaw_angle()
+    motor_l_r.stop()
+
+def turn_left(target_angle, power, turn_type):
+    # make the gyro angle variable that checks the gyro angle
+    gyro_angle1= hub.motion_sensor.get_yaw_angle()
+    gyro_angle2= hub.motion_sensor.get_yaw_angle()
+    # start turn loop
+    while gyro_angle2 > gyro_angle1+target_angle:
+        if turn_type == 'pivot': #chooses pivot turn
+            motor_l_r.start_tank_at_power(0, power)
+        elif turn_type == 'zero': #chooses zero point turn
+            motor_l_r.start_tank_at_power(-1*power,power)
+        # checks gyro angle and sets it to the current one
+        gyro_angle2 = hub.motion_sensor.get_yaw_angle()
+    motor_l_r.stop()
+
+def motor_r_reset():
+    motor_r.set_degrees_counted(0)
+
+def gyro_reset():
+    hub.motion_sensor.reset_yaw_angle()
+
+def get_yaw():
+    return hub.motion_sensor.get_yaw_angle()
+
+def get_color_l():
+    return color_l.get_reflected_light()
+
+def get_color_r():
+    return color_r.get_reflected_light()
+
+def get_motor_r():
+    return motor_r.get_degrees_counted()
+
+# start program --------------------------------------------------------------------
+
+# 3,2,1 lego--move out of launch after button press
+hub.light_matrix.show_image('HAPPY')
+hub.right_button.wait_until_pressed()
+hub.light_matrix.off()
+
+motor_r_reset()
+gyro_reset()
+timer.reset()
+
+
+
+while get_motor_r()<650:
+    gyro_follower(0,6,30)
+motor_l_r.stop()
+
+#turn_left(60, 50,'zero')
+#turn_right(60, 50,'zero')
+while get_motor_r()<1300:
+    line_follower(55,.3,20,'left','left')
+motor_l_r.stop()
+#airplane
+
+
+current_degrees = hub.motion_sensor.get_yaw_angle()
+while get_motor_r()<1660:
+    gyro_follower(current_degrees,6,30)
+motor_l_r.stop()
+
+motor_front.set_degrees_counted(0)
+motor_front.run_for_degrees(-30, 10)
+
+while get_motor_r()<1720:
+    gyro_follower(current_degrees,6,30)
+motor_l_r.stop()
+
+motor_front.run_for_degrees(-100, 50)
+
+gyro_follower(current_degrees+180,6,30)
+#motor_l_r.stop()
