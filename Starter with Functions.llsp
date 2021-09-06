@@ -8,14 +8,14 @@ from spike.operator import greater_than
 # variables -----------------------------------------------------------------------
 
 hub = PrimeHub()
-motor_l_r=MotorPair('C','D')
-motor_r=Motor('D')
-motor_l=Motor('C')
-motor_front=Motor('E')
-color_r=ColorSensor('B')
-color_l=ColorSensor('A')
-motor_rear=Motor('F')
-timer=Timer()
+motor_l_r = MotorPair('C','D')
+motor_r = Motor('D')
+motor_l = Motor('C')
+motor_front = Motor('E')
+color_r = ColorSensor('B')
+color_l = ColorSensor('A')
+motor_rear = Motor('F')
+timer = Timer()
 
 # functions -----------------------------------------------------------------------
 
@@ -114,16 +114,17 @@ motor_r_reset()
 gyro_reset()
 timer.reset()
 
-#while timer.now()<1: #start slow so wheels don't spin
-    #gyro_follower(0,6,40)
+
+#moves forward for one and a half wheel rotations 
 while get_motor_r()<540:
     gyro_follower(0,6,20)
 
+#follows the line for half a rotation then moves forward while following a certian degree
 while get_motor_r()<720:
     line_follower(55,.3,20,'right','right')
 while get_motor_r()<1300:
     gyro_follower(0,6,20)
-
+#follows the line for about 2 and a half rotation on the right part of the line with the right sensor. Then gyro follows for another 270 degrees
 while get_motor_r()<2180:
     line_follower(55,.3,20,'right','right')
 while get_motor_r()<2450:
@@ -135,5 +136,4 @@ motor_front.run_for_degrees(100, 10)
 wait_for_seconds(1)
 
 # back to base
-#while get_motor_r()<2000:
 gyro_follower(0,6,-20)
