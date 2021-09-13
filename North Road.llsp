@@ -58,6 +58,9 @@ def line_follower(target, k, power, sensor, side):
     motor_l_r.start_tank_at_power(left_power,right_power)
 
 def turn_right(target_angle, power, turn_type):
+    if target_angle < 0:
+        print('target_angle is negative')
+        return
     # make the gyro angle variables that checks the gyro angle
     gyro_angle1= hub.motion_sensor.get_yaw_angle()
     gyro_angle2= hub.motion_sensor.get_yaw_angle()
@@ -72,6 +75,9 @@ def turn_right(target_angle, power, turn_type):
     motor_l_r.stop()
 
 def turn_left(target_angle, power, turn_type):
+    if target_angle > 0:
+        print('target_angle is positive')
+        return
     # make the gyro angle variable that checks the gyro angle
     gyro_angle1= hub.motion_sensor.get_yaw_angle()
     gyro_angle2= hub.motion_sensor.get_yaw_angle()
@@ -115,32 +121,67 @@ gyro_reset()
 timer.reset()
 
 
+#gyro follow
 
 while get_motor_r()<650:
     gyro_follower(0,6,30)
 motor_l_r.stop()
 
-#turn_left(60, 50,'zero')
-#turn_right(60, 50,'zero')
-while get_motor_r()<1300:
+#swipe box
+
+turn_left(-60, 50,'zero')
+turn_right(60, 50,'zero')
+
+#line follow leftm, left
+
+#while get_motor_r()<1300:
+while get_motor_r()<1375:
     line_follower(55,.3,20,'left','left')
 motor_l_r.stop()
+
 #airplane
-
-
-current_degrees = hub.motion_sensor.get_yaw_angle()
-while get_motor_r()<1660:
-    gyro_follower(current_degrees,6,30)
-motor_l_r.stop()
-
+#left turn 90 degrees
+turn_left(-90, 20,'zero')
+#lower the gate
 motor_front.set_degrees_counted(0)
-motor_front.run_for_degrees(-30, 10)
-
-while get_motor_r()<1720:
+motor_front.run_for_degrees(-130, 10)
+motor_r_reset()
+current_degrees = hub.motion_sensor.get_yaw_angle()
+while get_motor_r()<60:
     gyro_follower(current_degrees,6,30)
 motor_l_r.stop()
-
-motor_front.run_for_degrees(-100, 50)
-
-gyro_follower(current_degrees+180,6,30)
+motor_front.run_for_degrees(150, 50)
+while get_motor_r()>0:
+    gyro_follower(current_degrees,6,-30)
+motor_l_r.stop()
+turn_right(90, 30,'zero')
+#while get_motor_r()<120:
+#    gyro_follower(current_degrees,6,150)
 #motor_l_r.stop()
+#wait_for_seconds(1)
+motor_front.run_for_degrees(-150, 50)
+
+#lower gate
+#gyro follow
+#current_degrees = hub.motion_sensor.get_yaw_angle()
+#while get_motor_r()<1660:
+#   gyro_follower(current_degrees,6,30)
+#motor_l_r.stop()
+
+#flipo the motor to electric
+
+#motor_front.set_degrees_counted(0)
+#motor_front.run_for_degrees(-30, 10)
+
+#while get_motor_r()<1720:
+#    gyro_follower(current_degrees,6,30)
+#motor_l_r.stop()
+
+#motor_front.run_for_degrees(-100, 50)
+
+#go back to home zoom zoom
+
+#gyro_follower(current_degrees+180,6,30)
+#motor_l_r.stop()
+
+
