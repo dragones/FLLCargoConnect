@@ -132,10 +132,9 @@ motor_l_r.stop()
 turn_left(-60, 50,'zero')
 turn_right(60, 50,'zero')
 
-#line follow leftm, left
+#line follow left, left
 
-#while get_motor_r()<1300:
-while get_motor_r()<1375:
+while get_motor_r()<1350:
     line_follower(55,.3,20,'left','left')
 motor_l_r.stop()
 
@@ -150,28 +149,44 @@ current_degrees = hub.motion_sensor.get_yaw_angle()
 while get_motor_r()<60:
     gyro_follower(current_degrees,6,30)
 motor_l_r.stop()
+#lowers the gate to unload caargo
 motor_front.run_for_degrees(150, 50)
+#backs away
 while get_motor_r()>0:
     gyro_follower(current_degrees,6,-30)
 motor_l_r.stop()
 turn_right(90, 30,'zero')
-#while get_motor_r()<120:
-#    gyro_follower(current_degrees,6,150)
-#motor_l_r.stop()
-#wait_for_seconds(1)
-motor_front.run_for_degrees(-150, 50)
+#raises front motor up a small amount
+motor_front.run_for_degrees(-35, 50)
 
-#lower gate
-#gyro follow
-#current_degrees = hub.motion_sensor.get_yaw_angle()
-#while get_motor_r()<1660:
-#   gyro_follower(current_degrees,6,30)
-#motor_l_r.stop()
 
-#flipo the motor to electric
+#moves to motor
+ 
+motor_r_reset()
+current_degrees = hub.motion_sensor.get_yaw_angle()
+while get_motor_r()<370:
+    gyro_follower(current_degrees,6,30)
+motor_l_r.stop()
 
-#motor_front.set_degrees_counted(0)
-#motor_front.run_for_degrees(-30, 10)
+#flip the motor to electric
+
+motor_front.set_degrees_counted(0)
+motor_front.run_for_degrees(-65, 15)
+
+motor_r_reset()
+current_degrees = hub.motion_sensor.get_yaw_angle()
+
+#backs up from motor
+
+while get_motor_r()>-180:
+    print(get_motor_r())
+    rev_gyro_follower(current_degrees,6,-20)
+motor_l_r.stop()
+#goes to home zoom zoom
+while get_motor_r()>-1700:
+    print(get_motor_r())
+    rev_gyro_follower(current_degrees,6,-100)
+motor_l_r.stop()
 
 #while get_motor_r()<1720:
 #    gyro_follower(current_degrees,6,30)
