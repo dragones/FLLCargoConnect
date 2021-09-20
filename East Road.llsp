@@ -120,11 +120,28 @@ motor_r_reset()
 gyro_reset()
 timer.reset()
 
-#gyro follower
-#line follow left, right
 #drop off trucks
+
+#gyro follower
+while get_motor_r()<360:
+    gyro_follower(0,6,30)
+motor_l_r.stop()
+#line follow left, right
+while get_motor_r()<1600:
+    line_follower(55,.3,30,'right','left')
+motor_l_r.stop()
+
+motor_rear.set_degrees_counted(0)
+motor_rear.run_for_degrees(-160, 20)
+
 #drop down bridges
 #line follow passed bridge
+
+gyro_reset()
+while get_motor_r()<2300:
+    gyro_follower(0,6,30)
+motor_l_r.stop()
+
 #left 90 degrees
 #gyro follower
 #turn right
