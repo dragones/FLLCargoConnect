@@ -132,22 +132,50 @@ while get_motor_r()<1600:
 motor_l_r.stop()
 
 motor_rear.set_degrees_counted(0)
-motor_rear.run_for_degrees(-160, 20)
+motor_rear.run_for_degrees(-145, 20)
 
 #drop down bridges
 #line follow passed bridge
 
 gyro_reset()
-while get_motor_r()<2300:
+while get_motor_r()<2410:
     gyro_follower(0,6,30)
 motor_l_r.stop()
+#drop down right bridge
+motor_rear.set_degrees_counted(0)
+motor_rear.run_for_degrees(-540, 40)
+
+gyro_reset()
 
 #left 90 degrees
-#gyro follower
-#turn right
-#push crane
-#gyro follower
-#line follower 
+turn_left(-170, 50,'pivot')
+
+#forward
+motor_r_reset()
+gyro_reset()
+while get_motor_r()<540:
+    gyro_follower(0,6,30)
+motor_l_r.stop()
+#right
+turn_right(90, 20,'zero')
+#forward
+gyro_reset()
+while get_motor_r()<600:
+    gyro_follower(0,6,30)
+motor_l_r.stop()
+#left
+turn_left(-90, 30,'pivot')
+
+# raise arm
+motor_rear.set_degrees_counted(0)
+motor_rear.run_for_degrees(-210, 40)
+# push crane
+gyro_reset()
+motor_r_reset()
+while get_motor_r()>-400:
+    rev_gyro_follower(0,6,-40)
+motor_l_r.stop()
+
 #smash truck
 #smash plane
 #go to home ZOOM ZOOM
