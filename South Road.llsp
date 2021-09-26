@@ -59,6 +59,9 @@ def line_follower(target, k, power, sensor, side):
 
 def turn_right(target_angle, power, turn_type):
     # make the gyro angle variables that checks the gyro angle
+    if target_angle < 0:
+        print('target_angle is negative')
+        return
     gyro_angle1= hub.motion_sensor.get_yaw_angle()
     gyro_angle2= hub.motion_sensor.get_yaw_angle()
     # start turn loop
@@ -73,6 +76,9 @@ def turn_right(target_angle, power, turn_type):
 
 def turn_left(target_angle, power, turn_type):
     # make the gyro angle variable that checks the gyro angle
+    if target_angle > 0:
+        print('target_angle is positive')
+        return
     gyro_angle1= hub.motion_sensor.get_yaw_angle()
     gyro_angle2= hub.motion_sensor.get_yaw_angle()
     # start turn loop
@@ -117,23 +123,37 @@ timer.reset()
 
 #moves forward for one and a half wheel rotations 
 while get_motor_r()<540:
-    gyro_follower(0,6,20)
-
+    gyro_follower(0,6,40)
+motor_l_r.stop()
 #follows the line for half a rotation then moves forward while following a certian degree
-while get_motor_r()<720:
-    line_follower(55,.3,20,'right','right')
-while get_motor_r()<1300:
+while get_motor_r()<850:
+    line_follower(55,.3,40,'right','right')
+motor_l_r.stop()
+
+#push da chicken
+while get_motor_r()<1050:
+    gyro_follower(0,6,20)
+motor_l_r.stop()
+turn_right(30, 45,'zero')
+turn_left(-19, 30,'zero')
+
+while get_motor_r()<1350:
     gyro_follower(0,6,20)
 #follows the line for about 2 and a half rotation on the right part of the line with the right sensor. Then gyro follows for another 270 degrees
 while get_motor_r()<2180:
-    line_follower(55,.3,20,'right','right')
-while get_motor_r()<2450:
-    gyro_follower(0,6,20)
+    line_follower(55,.3,40,'right','right')
+while get_motor_r()<2400:
+    gyro_follower(0,6,40)
 motor_l_r.stop()
-
+#rotate to drop package accurately
+turn_right(3,20,'zero')
+#missioon package deliver
 motor_front.set_degrees_counted(0)
 motor_front.run_for_degrees(100, 10)
 wait_for_seconds(1)
-
-# back to base
-gyro_follower(0,6,-20)
+#turn back left 
+turn_left(-3,20,'zero')
+# back to base zoom zoom!
+#gyro_reset()
+#gyro_follower(0,6,-60)
+motor_l_r.start_at_power(-60,0)
