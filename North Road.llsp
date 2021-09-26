@@ -134,7 +134,7 @@ turn_right(60, 50,'zero')
 
 #line follow left, left
 
-while get_motor_r()<1350:
+while get_motor_r()<1310:
     line_follower(55,.3,20,'left','left')
 motor_l_r.stop()
 
@@ -146,7 +146,7 @@ motor_front.set_degrees_counted(0)
 motor_front.run_for_degrees(-130, 10)
 motor_r_reset()
 current_degrees = hub.motion_sensor.get_yaw_angle()
-while get_motor_r()<60:
+while get_motor_r()<75:
     gyro_follower(current_degrees,6,30)
 motor_l_r.stop()
 #lowers the gate to unload caargo
