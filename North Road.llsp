@@ -140,7 +140,7 @@ motor_l_r.stop()
 
 #airplane
 #left turn 90 degrees
-turn_left(-90, 20,'zero')
+turn_left(-85, 20,'zero')
 #lower the gate
 motor_front.set_degrees_counted(0)
 motor_front.run_for_degrees(-130, 10)
@@ -155,7 +155,7 @@ motor_front.run_for_degrees(150, 50)
 while get_motor_r()>0:
     gyro_follower(current_degrees,6,-30)
 motor_l_r.stop()
-turn_right(90, 30,'zero')
+turn_right(85, 30,'zero')
 #raises front motor up a small amount
 motor_front.run_for_degrees(-35, 50)
 
