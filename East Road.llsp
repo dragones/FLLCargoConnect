@@ -146,6 +146,10 @@ motor_rear.set_degrees_counted(0)
 motor_rear.run_for_degrees(-540, 40)
 
 gyro_reset()
+#put contaainer in cargo conect circle and other circles
+#helicopter
+#cargo in the train
+#crane mission
 
 #left 90 degrees
 turn_left(-170, 50,'pivot')
@@ -176,6 +180,5 @@ while get_motor_r()>-400:
     rev_gyro_follower(0,6,-40)
 motor_l_r.stop()
 
-#smash truck
-#smash plane
-#go to home ZOOM ZOOM
+#truck trasportation journey
+#accident avoidence
