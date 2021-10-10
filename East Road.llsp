@@ -145,40 +145,40 @@ motor_l_r.stop()
 motor_rear.set_degrees_counted(0)
 motor_rear.run_for_degrees(-540, 40)
 
-gyro_reset()
 #put contaainer in cargo conect circle and other circles
 #helicopter
 #cargo in the train
 #crane mission
 
 #left 90 degrees
-turn_left(-170, 50,'pivot')
+#gyro_reset()
+#turn_left(-170, 50,'pivot')
 
 #forward
-motor_r_reset()
-gyro_reset()
-while get_motor_r()<540:
-    gyro_follower(0,6,30)
-motor_l_r.stop()
+#motor_r_reset()
+#gyro_reset()
+#while get_motor_r()<540:
+#    gyro_follower(0,6,30)
+#motor_l_r.stop()
 #right
-turn_right(90, 20,'zero')
+#turn_right(90, 20,'zero')
 #forward
-gyro_reset()
-while get_motor_r()<600:
-    gyro_follower(0,6,30)
-motor_l_r.stop()
+#gyro_reset()
+#while get_motor_r()<600:
+#    gyro_follower(0,6,30)
+#motor_l_r.stop()
 #left
-turn_left(-90, 30,'pivot')
+#turn_left(-90, 30,'pivot')
 
 # raise arm
-motor_rear.set_degrees_counted(0)
-motor_rear.run_for_degrees(-210, 40)
+#motor_rear.set_degrees_counted(0)
+#motor_rear.run_for_degrees(-210, 40)
 # push crane
-gyro_reset()
-motor_r_reset()
-while get_motor_r()>-400:
-    rev_gyro_follower(0,6,-40)
-motor_l_r.stop()
+#gyro_reset()
+#motor_r_reset()
+#while get_motor_r()>-400:
+#    rev_gyro_follower(0,6,-40)
+#motor_l_r.stop()
 
 #truck trasportation journey
 #accident avoidence
