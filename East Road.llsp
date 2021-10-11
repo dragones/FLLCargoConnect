@@ -29,6 +29,11 @@ def gyro_follower(target, k, power):
     # makes sure the robot stays on the threshold
     motor_l_r.start_at_power(power,steering)
 
+def gyro_follower_loop(target, k, power, distance):
+    while get_motor_r()<distance:
+        gyro_follower(target,k,power)
+    motor_l_r.stop()
+
 def rev_gyro_follower(target, k, power):
     # gets the current yaw angle
     degrees =hub.motion_sensor.get_yaw_angle()
@@ -38,6 +43,11 @@ def rev_gyro_follower(target, k, power):
     steering = int(error*k)
     # makes sure the robot stays on the threshold
     motor_l_r.start_at_power(power,steering)
+
+def rev_gyro_follower_loop(target, k, power, distance):
+    while get_motor_r()>distance:
+        rev_gyro_follower(target,k,power)
+    motor_l_r.stop()
 
 def line_follower(target, k, power, sensor, side):
     # gets the current reflected light
@@ -56,6 +66,11 @@ def line_follower(target, k, power, sensor, side):
     right_power=power+correction
     left_power=power-correction
     motor_l_r.start_tank_at_power(left_power,right_power)
+
+def line_follower_loop(target, k, power, sensor, side, distance):
+    while get_motor_r()<distance:
+        line_follower(target, k, power, sensor, side)
+    motor_l_r.stop()
 
 def turn_right(target_angle, power, turn_type):
     if target_angle < 0:
@@ -120,35 +135,58 @@ motor_r_reset()
 gyro_reset()
 timer.reset()
 
-#drop off trucks
+# M13: drop off trucks
 
 #gyro follower
-while get_motor_r()<360:
-    gyro_follower(0,6,30)
-motor_l_r.stop()
+gyro_follower_loop(0,6,30,600)
 #line follow left, right
-while get_motor_r()<1600:
-    line_follower(55,.3,30,'right','left')
-motor_l_r.stop()
+line_follower_loop(55, .35, 30, 'right','left', 1900)
 
+# M14: drop down bridges
 motor_rear.set_degrees_counted(0)
 motor_rear.run_for_degrees(-145, 20)
 
-#drop down bridges
 #line follow passed bridge
 
 gyro_reset()
-while get_motor_r()<2410:
-    gyro_follower(0,6,30)
-motor_l_r.stop()
+gyro_follower_loop(0,6,30,2710)
+#while get_motor_r()<2710:
+#    gyro_follower(0,6,30)
+#motor_l_r.stop()
 #drop down right bridge
 motor_rear.set_degrees_counted(0)
-motor_rear.run_for_degrees(-540, 40)
+motor_rear.run_for_degrees(-520, 40)
+motor_rear.run_for_degrees(50, 40)
 
-#put contaainer in cargo conect circle and other circles
-#helicopter
-#cargo in the train
-#crane mission
+# M16: put contaainer in cargo conect circle and other circles
+gyro_reset()
+turn_right(80, 30,'zero')
+gyro_reset()
+motor_r_reset()
+rev_gyro_follower_loop(0,6,-30,-50)
+motor_front.set_degrees_counted(0)
+motor_front.run_for_degrees(-200, 30)
+
+# M08: helicopter
+
+#rotate back to line
+gyro_reset()
+motor_r_reset()
+gyro_follower_loop(0,6,30,50)
+turn_left(-80, 30,'zero')
+
+gyro_reset()
+motor_r_reset()
+rev_gyro_follower_loop(0,6,-30,-350)
+line_follower_loop(55, .25, 20, 'right','left',900)
+
+motor_r_reset()
+current_degrees = hub.motion_sensor.get_yaw_angle()
+gyro_follower_loop(current_degrees,6 ,50,270)
+
+# M09: cargo in the train
+
+# M07: crane mission
 
 #left 90 degrees
 #gyro_reset()
@@ -180,5 +218,5 @@ motor_rear.run_for_degrees(-540, 40)
 #    rev_gyro_follower(0,6,-40)
 #motor_l_r.stop()
 
-#truck trasportation journey
-#accident avoidence
+# truck trasportation journey
+# accident avoidence
