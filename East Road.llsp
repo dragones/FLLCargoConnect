@@ -162,7 +162,7 @@ gyro_follower_loop(0,6,30,2710)
 #drop down right bridge
 motor_rear.set_degrees_counted(0)
 motor_rear.run_for_degrees(-520, 40)
-motor_rear.run_for_degrees(90, 40)
+motor_rear.run_for_degrees(110, 40)
 
 # M16: put contaainer in cargo conect circle and other circles
 gyro_reset()
@@ -184,14 +184,19 @@ motor_r_reset()
 current_degrees = hub.motion_sensor.get_yaw_angle()
 gyro_follower_loop(current_degrees,6 ,50,270)
 
-# M09: cargo in the train
-rev_gyro_follower_loop_reset(0,6,-30,-700,True)
-turn_right(115, 30,'zero')
-gyro_follower_loop_reset(0,6,30,300,True)
+rev_gyro_follower_loop_reset(0,6,-30,-170,True)
+turn_right(120, 30,'pivot')
 motor_r_reset()
-line_follower_loop(55, .25, 20, 'left','left',350)
-turn_left(-90,20,'zero')
-gyro_follower_loop_reset(0,6,30,600,True)
+line_follower_loop(55, .25, 20, 'left','right',550)
+
+# M09: cargo in the train
+#rev_gyro_follower_loop_reset(0,6,-30,-700,True)
+#turn_right(115, 30,'zero')
+#gyro_follower_loop_reset(0,6,30,300,True)
+#motor_r_reset()
+#line_follower_loop(55, .25, 20, 'left','left',350)
+#turn_left(-90,20,'zero')
+#gyro_follower_loop_reset(0,6,30,600,True)
 
 # M07: crane mission
 
