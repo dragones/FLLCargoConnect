@@ -177,19 +177,23 @@ motor_front.run_for_degrees(-200, 30)
 #rotate back to line
 gyro_follower_loop_reset(0,6,30,50,True)
 turn_left(-80, 30,'zero')
-rev_gyro_follower_loop_reset(0,6,-30,-350,True)
+rev_gyro_follower_loop_reset(0,6,-30,-300,True)
 line_follower_loop(55, .25, 20, 'right','left',900)
 #line_follower_loop(55, .25, 40, 'right','left',700)
 motor_r_reset()
 current_degrees = hub.motion_sensor.get_yaw_angle()
 gyro_follower_loop(current_degrees,6 ,50,270)
 
+# M09: train down track 
 rev_gyro_follower_loop_reset(0,6,-30,-170,True)
-turn_right(120, 30,'pivot')
-motor_r_reset()
-line_follower_loop(55, .25, 20, 'left','right',550)
+turn_left(-55, 30, 'pivot')
+motor_rear.set_degrees_counted(0)
+motor_rear.run_for_degrees(-130,30)
+rev_gyro_follower_loop_reset(0,6,-100,-875,True)
 
-# M09: cargo in the train
+# M07: crane mission
+turn_left(-45, 30, 'pivot')
+gyro_follower_loop_reset(0,6,40,500,True)
 #rev_gyro_follower_loop_reset(0,6,-30,-700,True)
 #turn_right(115, 30,'zero')
 #gyro_follower_loop_reset(0,6,30,300,True)
