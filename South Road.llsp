@@ -156,4 +156,8 @@ turn_left(-3,20,'zero')
 # back to base zoom zoom!
 #gyro_reset()
 #gyro_follower(0,6,-60)
+#extend the scissors lowers train tracks
+motor_rear.run_for_degrees(-50,30)
+
 motor_l_r.start_at_power(-60,0)
+
