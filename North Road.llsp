@@ -120,8 +120,7 @@ motor_r_reset()
 gyro_reset()
 timer.reset()
 
-
-#gyro follow
+# M02: Unused Capacity
 
 while get_motor_r()<650:
     gyro_follower(0,6,30)
@@ -132,15 +131,15 @@ motor_l_r.stop()
 turn_left(-60, 50,'zero')
 turn_right(60, 50,'zero')
 
-#line follow left, left
+# M03: Unload Cargo Plane
 
 while get_motor_r()<1310:
     line_follower(55,.3,20,'left','left')
 motor_l_r.stop()
 
-#airplane
 #left turn 90 degrees
 turn_left(-85, 20,'zero')
+
 #lower the gate
 motor_front.set_degrees_counted(0)
 motor_front.run_for_degrees(-130, 10)
@@ -159,8 +158,7 @@ turn_right(85, 30,'zero')
 #raises front motor up a small amount
 motor_front.run_for_degrees(-35, 50)
 
-
-#moves to motor
+# M05: Switch Engine
  
 motor_r_reset()
 current_degrees = hub.motion_sensor.get_yaw_angle()
@@ -177,26 +175,11 @@ motor_r_reset()
 current_degrees = hub.motion_sensor.get_yaw_angle()
 
 #backs up from motor
-
 while get_motor_r()>-180:
-    print(get_motor_r())
     rev_gyro_follower(current_degrees,6,-20)
 motor_l_r.stop()
+
 #goes to home zoom zoom
 while get_motor_r()>-1700:
-    print(get_motor_r())
     rev_gyro_follower(current_degrees,6,-100)
 motor_l_r.stop()
-
-#while get_motor_r()<1720:
-#    gyro_follower(current_degrees,6,30)
-#motor_l_r.stop()
-
-#motor_front.run_for_degrees(-100, 50)
-
-#go back to home zoom zoom
-
-#gyro_follower(current_degrees+180,6,30)
-#motor_l_r.stop()
-
-
