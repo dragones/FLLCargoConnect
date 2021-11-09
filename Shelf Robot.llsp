@@ -1,0 +1,29 @@
+# imports -------------------------------------------------------------------------
+
+from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+from spike.control import wait_for_seconds, wait_until, Timer
+from spike.operator import less_than
+from spike.operator import greater_than
+
+# variables -----------------------------------------------------------------------
+
+hub = PrimeHub()
+color_top = ColorSensor('A')
+#color_bottom = ColorSensor('B')
+sensor_motor = Motor('C')
+#top_package_motor = Motor('D')
+#bottom_package_motor = ('E')
+
+
+# code -----------------------------------------------------------------------------
+
+#Ask prime for next package
+#Finds correct package
+sensor_motor.run_for_degrees(-180, 20)
+#sensor_motor.start(-20)
+#sensor_motor.run_for_degrees(-10, 20)
+#while(color_top.get_color() <> 'red')
+#    sensor_motor.run_for_degrees(-10, 20)
+#sensor_motor.stop()
+
+#Takes package of shelf
