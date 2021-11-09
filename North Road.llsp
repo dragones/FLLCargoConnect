@@ -57,6 +57,11 @@ def line_follower(target, k, power, sensor, side):
     left_power=power-correction
     motor_l_r.start_tank_at_power(left_power,right_power)
 
+def line_follower_loop(target, k, power, sensor, side, distance):
+    while get_motor_r()<distance:
+        line_follower(target, k, power, sensor, side)
+    motor_l_r.stop()
+
 def turn_right(target_angle, power, turn_type):
     if target_angle < 0:
         print('target_angle is negative')
@@ -129,7 +134,7 @@ motor_l_r.stop()
 #swipe box
 
 turn_left(-60, 50,'zero')
-turn_right(60, 50,'zero')
+turn_right(55, 50,'zero')
 
 # M03: Unload Cargo Plane
 
@@ -149,20 +154,21 @@ while get_motor_r()<75:
     gyro_follower(current_degrees,6,30)
 motor_l_r.stop()
 #lowers the gate to unload caargo
-motor_front.run_for_degrees(150, 50)
+motor_front.run_for_degrees(175, 69)
 #backs away
 while get_motor_r()>0:
     gyro_follower(current_degrees,6,-30)
 motor_l_r.stop()
-turn_right(85, 30,'zero')
+turn_right(80, 30,'zero')
 #raises front motor up a small amount
-motor_front.run_for_degrees(-35, 50)
+motor_front.run_for_degrees(-50, 50)
 
 # M05: Switch Engine
- 
+
+line_follower_loop(55, .32, 20, 'left','left',45)
 motor_r_reset()
 current_degrees = hub.motion_sensor.get_yaw_angle()
-while get_motor_r()<370:
+while get_motor_r()<300:
     gyro_follower(current_degrees,6,30)
 motor_l_r.stop()
 
@@ -183,3 +189,5 @@ motor_l_r.stop()
 while get_motor_r()>-1700:
     rev_gyro_follower(current_degrees,6,-100)
 motor_l_r.stop()
+
+
