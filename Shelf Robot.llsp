@@ -9,21 +9,46 @@ from spike.operator import greater_than
 
 hub = PrimeHub()
 color_top = ColorSensor('A')
-#color_bottom = ColorSensor('B')
+color_bottom = ColorSensor('B')
 sensor_motor = Motor('C')
-#top_package_motor = Motor('D')
+top_package_motor = Motor('D')
 #bottom_package_motor = ('E')
 
+# hardware -------------------------------------------------------------------------
+
+# bottom package motor (smaller size)
+# extend robot range
+# backstop for packages
 
 # code -----------------------------------------------------------------------------
 
-#Ask prime for next package
-#Finds correct package
-sensor_motor.run_for_degrees(-180, 20)
-#sensor_motor.start(-20)
-#sensor_motor.run_for_degrees(-10, 20)
-#while(color_top.get_color() <> 'red')
-#    sensor_motor.run_for_degrees(-10, 20)
-#sensor_motor.stop()
+# 230 is total rail distance
+# 120 to center 1st package
 
-#Takes package of shelf
+# Ask prime for next package
+
+# Finds correct package
+# Assumption: Defined location for 4 packages
+
+sensor_motor.run_for_degrees(-120, 20)
+print('left top>' + str(color_top.get_color()))
+print('left bottom>' + str(color_bottom.get_color()))
+
+# set package_location
+if color_top.get_color() == 'cyan':
+    hub.light_matrix.write('1')
+
+elif color_bottom.get_color() == 'cyan':
+    hub.light_matrix.write('3')
+
+sensor_motor.run_for_degrees(120, 20)
+
+# Takes package off shelf 
+
+# if package location 1
+top_package_motor.run_for_degrees(180,75)
+top_package_motor.run_for_degrees(-180,75)
+
+# elif package location 2
+# elif package location 3
+# elif package location 4
