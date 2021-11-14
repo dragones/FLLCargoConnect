@@ -35,20 +35,32 @@ print('left top>' + str(color_top.get_color()))
 print('left bottom>' + str(color_bottom.get_color()))
 
 # set package_location
+package_location = -1
 if color_top.get_color() == 'cyan':
-    hub.light_matrix.write('1')
+    package_location = 1   
 
 elif color_bottom.get_color() == 'cyan':
-    hub.light_matrix.write('3')
+    package_location = 3
 
+#move to position then check 2
+#check 4
+
+hub.light_matrix.write(package_location)
 sensor_motor.run_for_degrees(120, 20)
 
 # Takes package off shelf 
 
 # if package location 1
-top_package_motor.run_for_degrees(180,75)
-top_package_motor.run_for_degrees(-180,75)
+if package_location == 1:
+    top_package_motor.run_for_degrees(180,75)
+    top_package_motor.run_for_degrees(-180,75)
+#elif package_location == 3
+#bottom_package_motor.run_for_degrees(180,75)
+#bottom_package_motor.run_for_degrees(-180,75)
 
 # elif package location 2
-# elif package location 3
+#move to position 2
+#kick package
 # elif package location 4
+#move to position 4
+#kick package
