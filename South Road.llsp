@@ -83,6 +83,7 @@ def turn_right(target_angle, power, turn_type):
     # make the gyro angle variables that checks the gyro angle
     if target_angle < 0:
         print('target_angle is negative')
+        hub.status_light.on('red')
         return
     gyro_angle1= hub.motion_sensor.get_yaw_angle()
     gyro_angle2= hub.motion_sensor.get_yaw_angle()
@@ -100,6 +101,7 @@ def turn_left(target_angle, power, turn_type):
     # make the gyro angle variable that checks the gyro angle
     if target_angle > 0:
         print('target_angle is positive')
+        hub.status_light.on('red')
         return
     gyro_angle1= hub.motion_sensor.get_yaw_angle()
     gyro_angle2= hub.motion_sensor.get_yaw_angle()
@@ -170,7 +172,7 @@ while get_motor_r()<540:
 motor_l_r.stop()
 #follows the line for half a rotation then moves forward while following a certian degree
 while get_motor_r()<850:
-    line_follower(55,.3,40,'right','right')
+    line_follower(55,.15,40,'right','right') # reduce constant
 motor_l_r.stop()
 
 #push da chicken
@@ -178,16 +180,22 @@ while get_motor_r()<1050:
     gyro_follower(0,6,20)
 motor_l_r.stop()
 turn_right(30, 45,'zero')
-turn_left(-19, 30,'zero')
+turn_left(-10, 30,'zero')
 
 # M11: Home Delivery
 while get_motor_r()<1350:
-    gyro_follower(0,6,20)
+    gyro_follower(1,6,20)
+motor_l_r.stop()
+
+# error correct
+turn_right(4, 18, 'zero')
+
 #follows the line for about 2 and a half rotation on the right part of the line with the right sensor. Then gyro follows for another 270 degrees
 while get_motor_r()<2180:
     line_follower(55,.3,40,'right','right')
+gyro_reset()
 while get_motor_r()<2400:
-    gyro_follower(0,6,40)
+    gyro_follower(0,3,40) #reduce coefficient
 motor_l_r.stop()
 #rotate to drop package accurately
 turn_right(3,20,'zero')
@@ -215,7 +223,19 @@ gyro_follower_loop_reset(0, 6, 40, 360, True)
 
 #back to base
 motor_r_reset()
-while get_motor_r()<1000:
+while get_motor_r()<950:
     motor_l_r.start_at_power(75,-15)
 motor_l_r.stop()
-gyro_follower_loop_reset(0, 3, 100, 3200, False)
+gyro_follower_loop_reset(0, 3, 85, 3300, False)
+
+# ARCHIVE: correct angle for line following
+#while get_color_r() > 70 or get_color_r() < 30:
+#    if get_color_r() > 70:
+        # turn left
+#        motor_l_r.start_tank_at_power(-1*15,15)
+#    elif get_color_r() < 30:
+        # turn right
+#        motor_l_r.start_tank_at_power(15,-1*15)
+#motor_l_r.stop()
+
+#raise SystemExit
