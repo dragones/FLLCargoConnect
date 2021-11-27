@@ -29,6 +29,17 @@ def gyro_follower(target, k, power):
     # makes sure the robot stays on the threshold
     motor_l_r.start_at_power(power,steering)
 
+def gyro_follower_loop(target, k, power, distance):
+    while get_motor_r()<distance:
+        gyro_follower(target,k,power)
+    motor_l_r.stop()
+
+def gyro_follower_loop_reset(target, k, power, distance, reset):
+    if reset:
+        gyro_reset()
+        motor_r_reset()
+    gyro_follower_loop(target, k, power, distance)
+
 def rev_gyro_follower(target, k, power):
     # gets the current yaw angle
     degrees =hub.motion_sensor.get_yaw_angle()
@@ -38,6 +49,17 @@ def rev_gyro_follower(target, k, power):
     steering = int(error*k)
     # makes sure the robot stays on the threshold
     motor_l_r.start_at_power(power,steering)
+
+def rev_gyro_follower_loop(target, k, power, distance):
+    while get_motor_r()>distance:
+        rev_gyro_follower(target,k,power)
+    motor_l_r.stop()
+
+def rev_gyro_follower_loop_reset(target, k, power, distance, reset):
+    if reset:
+        gyro_reset()
+        motor_r_reset()
+    rev_gyro_follower_loop(target, k, power, distance)
 
 def line_follower(target, k, power, sensor, side):
     # gets the current reflected light
@@ -127,67 +149,55 @@ timer.reset()
 
 # M02: Unused Capacity
 
-while get_motor_r()<650:
-    gyro_follower(0,6,30)
-motor_l_r.stop()
-
-#swipe box
-
+gyro_follower_loop_reset(0, 6, 30, 400, True)
 turn_left(-60, 50,'zero')
-turn_right(55, 50,'zero')
+turn_right(50, 40,'zero')
 
 # M03: Unload Cargo Plane
+line_follower_loop(55, .3, 30, 'left','left', 1020)
 
-while get_motor_r()<1310:
-    line_follower(55,.3,20,'left','left')
-motor_l_r.stop()
-
-#left turn 90 degrees
+#left turn to plane
 turn_left(-85, 20,'zero')
 
-#lower the gate
+# raise & lower the gate
 motor_front.set_degrees_counted(0)
-motor_front.run_for_degrees(-130, 10)
-motor_r_reset()
-current_degrees = hub.motion_sensor.get_yaw_angle()
-while get_motor_r()<75:
-    gyro_follower(current_degrees,6,30)
-motor_l_r.stop()
-#lowers the gate to unload caargo
+motor_front.run_for_degrees(-145, 10)
+gyro_follower_loop_reset(0, 6, 30, 80, True)
 motor_front.run_for_degrees(175, 69)
-#backs away
-while get_motor_r()>0:
-    gyro_follower(current_degrees,6,-30)
-motor_l_r.stop()
-turn_right(80, 30,'zero')
-#raises front motor up a small amount
-motor_front.run_for_degrees(-50, 50)
+
+# raise forklit, backs away
+# raise gate to avoid cargo
+motor_front.set_degrees_counted(0)
+motor_front.run_for_degrees(-145, 50)
 
 # M05: Switch Engine
-
-line_follower_loop(55, .32, 20, 'left','left',45)
-motor_r_reset()
-current_degrees = hub.motion_sensor.get_yaw_angle()
-while get_motor_r()<300:
-    gyro_follower(current_degrees,6,30)
-motor_l_r.stop()
+rev_gyro_follower_loop_reset(0, 6, -30, -80, True)
+turn_right(80, 30,'zero')
+line_follower_loop(55, .3, 25, 'left','left',20)
+motor_front.set_degrees_counted(0)
+motor_front.run_for_degrees(100, 40)
+gyro_follower_loop_reset(-6, 6, 30, 225, True)
 
 #flip the motor to electric
-
 motor_front.set_degrees_counted(0)
-motor_front.run_for_degrees(-65, 15)
-
+motor_front.run_for_degrees(-100, 45)
 motor_r_reset()
-current_degrees = hub.motion_sensor.get_yaw_angle()
+rev_gyro_follower_loop(0, 6, -30, -650)
+gyro_reset()
+turn_right(172, 30,'zero')
 
-#backs up from motor
-while get_motor_r()>-180:
-    rev_gyro_follower(current_degrees,6,-20)
-motor_l_r.stop()
+# M16 Cargo Connect
+rev_gyro_follower_loop_reset(5, 6, -30, -180, True)
+# lower gate
+motor_rear.set_degrees_counted(0)
+motor_rear.run_for_degrees(180, 50)
+# forward
+motor_r_reset()
+line_follower_loop(55, .3, 15, 'right','right',210)
+# raise gate
+motor_rear.run_for_degrees(-180, 50)
 
-#goes to home zoom zoom
-while get_motor_r()>-1700:
-    rev_gyro_follower(current_degrees,6,-100)
-motor_l_r.stop()
-
-
+# back to base
+while get_motor_r()<660:
+    line_follower(55, .3, 40, 'right','right')
+gyro_follower_loop_reset(0, 6, 50, 500, True)
