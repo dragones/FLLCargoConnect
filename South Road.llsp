@@ -40,6 +40,16 @@ def gyro_follower_loop_reset(target, k, power, distance, reset):
         motor_r_reset()
     gyro_follower_loop(target, k, power, distance)
 
+def rev_gyro_follower(target, k, power):
+    # gets the current yaw angle
+    degrees =hub.motion_sensor.get_yaw_angle()
+    # makes the error variable
+    error =degrees-target
+    # making the steering correction
+    steering = int(error*k)
+    # makes sure the robot stays on the threshold
+    motor_l_r.start_at_power(power,steering)
+
 def rev_gyro_follower_loop(target, k, power, distance):
     while get_motor_r()>distance:
         rev_gyro_follower(target,k,power)
@@ -50,16 +60,6 @@ def rev_gyro_follower_loop_reset(target, k, power, distance, reset):
         gyro_reset()
         motor_r_reset()
     rev_gyro_follower_loop(target, k, power, distance)
-
-def rev_gyro_follower(target, k, power):
-    # gets the current yaw angle
-    degrees =hub.motion_sensor.get_yaw_angle()
-    # makes the error variable
-    error =degrees-target
-    # making the steering correction
-    steering = int(error*k)
-    # makes sure the robot stays on the threshold
-    motor_l_r.start_at_power(power,steering)
 
 def line_follower(target, k, power, sensor, side):
     # gets the current reflected light
@@ -133,10 +133,10 @@ def get_color_r():
 def get_motor_r():
     return motor_r.get_degrees_counted()
 
-def reverse_correct(speed):
+def reverse_square_on_line(speed):
     # check if speed negative
     if speed > 0:
-        print('speed parameter is postive.speed parameter must be negative')
+        print('speed parameter is postive.  speed parameter must be negative')
         hub.status_light.on('red')
         return
 
@@ -213,7 +213,7 @@ rev_gyro_follower_loop_reset(0, 6, -30, -425, True)
 turn_right(80,30,'zero')
 
 # reverse and straighten on black line
-reverse_correct(-30)
+reverse_square_on_line(-30)
 rev_gyro_follower_loop_reset(0, 6, -30, -340, True)
 
 # drop attachment
@@ -226,7 +226,7 @@ motor_r_reset()
 while get_motor_r()<950:
     motor_l_r.start_at_power(75,-15)
 motor_l_r.stop()
-gyro_follower_loop_reset(0, 3, 85, 3300, False)
+gyro_follower_loop_reset(0, 3, 85, 3450, False)
 
 # ARCHIVE: correct angle for line following
 #while get_color_r() > 70 or get_color_r() < 30:
