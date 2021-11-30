@@ -136,6 +136,27 @@ def get_color_r():
 def get_motor_r():
     return motor_r.get_degrees_counted()
 
+def square_on_line(speed):
+    # check if speed negative
+    if speed < 0:
+        print('speed parameter is negatifve.  speed parameter must be postive')
+        hub.status_light.on('red')
+        return
+
+    gyro_reset()
+
+    while get_color_l() > 25 and get_color_r() > 25:
+        gyro_follower(0,6,speed)
+    motor_l_r.stop()
+
+    while get_color_l() > 25 or get_color_r() > 25:
+        if(get_color_l() > 25):
+            motor_l_r.move_tank(10,'degrees',speed,-speed)
+        elif(get_color_r() > 25):
+            motor_l_r.move_tank(10,'degrees',-speed,speed)
+        motor_l_r.move_tank(10,'degrees',speed,speed)
+    motor_l_r.stop()
+
 # start program --------------------------------------------------------------------
 
 # 3,2,1 lego--move out of launch after button press
@@ -161,14 +182,15 @@ gyro_follower_loop(0,6,30,2710)
 
 #drop down right bridge
 motor_rear.set_degrees_counted(0)
-motor_rear.run_for_degrees(-520, 40)
-motor_rear.run_for_degrees(110, 40)
+motor_rear.run_for_degrees(-550, 40) 
+motor_rear.run_for_degrees(140, 40) 
 
-# M16: put contaainer in cargo conect circle and other circles
+# M16: put container in cargo conect circle and other circles
 gyro_reset()
 turn_right(80, 30,'zero')
 
 rev_gyro_follower_loop_reset(0,6,-30,-50,True)
+
 motor_front.set_degrees_counted(0)
 motor_front.run_for_degrees(-200, 30)
 
@@ -177,9 +199,15 @@ motor_front.run_for_degrees(-200, 30)
 #rotate back to line
 gyro_follower_loop_reset(0,6,30,50,True)
 turn_left(-80, 30,'zero')
-rev_gyro_follower_loop_reset(0,6,-30,-300,True)
-line_follower_loop(55, .25, 20, 'right','left',900)
-#line_follower_loop(55, .25, 40, 'right','left',700)
+
+rev_gyro_follower_loop_reset(0,6,-30,-250,True) 
+
+# advance to helicopter
+while get_motor_r()< 0: #100
+    line_follower(55, .3, 15, 'right','left') 
+while get_motor_r()< 950: #900
+    line_follower(55, .2, 40, 'right','left') 
+
 motor_r_reset()
 current_degrees = hub.motion_sensor.get_yaw_angle()
 gyro_follower_loop(current_degrees,6 ,50,270)
@@ -189,42 +217,57 @@ rev_gyro_follower_loop_reset(0,6,-30,-170,True)
 turn_left(-55, 30, 'pivot')
 motor_rear.set_degrees_counted(0)
 motor_rear.run_for_degrees(-130,30)
-rev_gyro_follower_loop_reset(0,6,-100,-850,True)
+
+motor_r_reset()
+gyro_reset()
+while get_motor_r()>-750:
+    rev_gyro_follower(0,6,-100)
+while get_motor_r()>-925:  
+    rev_gyro_follower(0,6,-70)
+motor_l_r.stop()
 
 # M07: crane mission
 turn_left(-37, 30, 'pivot')
+
+# square off on black lines
+square_on_line(30)
+turn_left(-57,30,'pivot')
 gyro_reset()
-
-while (get_color_r()>25):
-    gyro_follower(0,6,30)
-motor_l_r.stop()
-
-turn_left(-50,30,'pivot')
-
-gyro_reset()
-while (get_color_r()>25):
+motor_r_reset()
+while get_motor_r()<540:
     gyro_follower(0,6,40)
-motor_l_r.stop()
+square_on_line(30)
+
+gyro_reset()
+turn_right(90,30,'zero') 
+square_on_line(30)
+
+gyro_reset()
+turn_left(-90,30,'zero')
+motor_rear.run_for_degrees(-180,50)
+rev_gyro_follower_loop_reset(0, 6, -40, -400, True)
+
+# MO6: accident avoidence
+motor_r_reset()
+while get_motor_r()<69:
+    gyro_follower(0,6,30)
+
+motor_r_reset()
+line_follower_loop(55, .30, 20, 'right','left',575) 
 
 turn_right(90,30,'pivot')
-
-turn_left(-90,30,'pivot')
-
-motor_rear.run_for_degrees(-180,50)
-
-rev_gyro_follower_loop_reset(0, 6, -40, -625, True)
-
-#MO6 accident avoidence
-gyro_follower_loop_reset(0, 6, 40, 69, True)
-motor_r_reset()
-line_follower_loop(55, .25, 30, 'right','left',520)
-
-turn_right(90,30,'zero')
 motor_rear.run_for_degrees(-60,50)
 gyro_follower_loop_reset(0,6,40,269,True)
 turn_left(-90, 30, 'pivot')
-motor_front.run_for_degrees(45,20)
-gyro_follower_loop_reset(0, 6, 30, 180, True)
 
+rev_gyro_follower_loop_reset(0, 6, -30, -40, True)
 
-#
+# drop panel
+motor_front.run_for_degrees(130,20)
+motor_front.run_for_degrees(-130,20)
+
+# park on blue line
+gyro_follower_loop_reset(0, 6, 30, 200, True)
+
+#motor_l_r.stop()
+#raise SystemExit
