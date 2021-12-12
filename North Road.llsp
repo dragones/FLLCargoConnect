@@ -176,7 +176,7 @@ turn_right(80, 30,'zero')
 line_follower_loop(55, .3, 25, 'left','left',20)
 motor_front.set_degrees_counted(0)
 motor_front.run_for_degrees(100, 40)
-gyro_follower_loop_reset(-6, 6, 30, 225, True)
+gyro_follower_loop_reset(-3, 6, 30, 225, True) #-6
 
 #flip the motor to electric
 motor_front.set_degrees_counted(0)
@@ -190,7 +190,7 @@ turn_right(172, 30,'zero')
 rev_gyro_follower_loop_reset(5, 6, -30, -180, True)
 # lower gate
 motor_rear.set_degrees_counted(0)
-motor_rear.run_for_degrees(180, 50)
+motor_rear.run_for_degrees(200, 50) #180
 # forward
 motor_r_reset()
 line_follower_loop(55, .3, 15, 'right','right',210)
@@ -199,5 +199,5 @@ motor_rear.run_for_degrees(-180, 50)
 
 # back to base
 while get_motor_r()<660:
-    line_follower(55, .3, 40, 'right','right')
-gyro_follower_loop_reset(0, 6, 50, 500, True)
+    line_follower(55, .3, 60, 'right','right')
+gyro_follower_loop_reset(0, 6, 70, 500, True)
