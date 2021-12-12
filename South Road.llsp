@@ -198,13 +198,13 @@ while get_motor_r()<2400:
     gyro_follower(0,3,40) #reduce coefficient
 motor_l_r.stop()
 #rotate to drop package accurately
-turn_right(3,20,'zero')
+turn_right(4,20,'zero') #3
 #mission package deliver
 motor_front.set_degrees_counted(0)
 motor_front.run_for_degrees(110, 10)
 wait_for_seconds(1)
 #turn back left 
-turn_left(-3,20,'zero')
+turn_left(-4,20,'zero')
 
 # M09 - Drop down railroad track
 rev_gyro_follower_loop_reset(0, 6, -20, -300, True)
