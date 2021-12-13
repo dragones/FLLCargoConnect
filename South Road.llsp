@@ -79,6 +79,12 @@ def line_follower(target, k, power, sensor, side):
     left_power=power-correction
     motor_l_r.start_tank_at_power(left_power,right_power)
 
+def line_follower_loop(target, k, power, sensor, side, distance):
+    while get_motor_r()<distance:
+        line_follower(target, k, power, sensor, side)
+    motor_l_r.stop()
+
+
 def turn_right(target_angle, power, turn_type):
     # make the gyro angle variables that checks the gyro angle
     if target_angle < 0:
@@ -166,45 +172,52 @@ motor_r_reset()
 gyro_reset()
 timer.reset()
 
-#moves forward for one and a half wheel rotations 
-while get_motor_r()<540:
-    gyro_follower(0,6,40)
-motor_l_r.stop()
-#follows the line for half a rotation then moves forward while following a certian degree
-while get_motor_r()<850:
-    line_follower(55,.15,40,'right','right') # reduce constant
-motor_l_r.stop()
+# M12 Large Delivery
 
-#push da chicken
-while get_motor_r()<1050:
-    gyro_follower(0,6,20)
-motor_l_r.stop()
-turn_right(30, 45,'zero')
-turn_left(-10, 30,'zero')
+#gyro out of base
+gyro_follower_loop_reset(0, 6, 50, 360, True)
+#stop at chicken(line)
+line_follower_loop(55,.15,40,'right','left',1100)
+#line follow around chicken
+turn_left(-45, 30,'zero')
+line_follower_loop(55,.4,30,'right','left',1969)
+turn_left(-60, 30,'zero')
+#contiue line following until holder
+line_follower_loop(55,.3,30,'right','left',2300)
+
+#Pivot 90 degrees left
+turn_left(-45, 30,'zero')
+gyro_follower_loop_reset(0, 6, 30, 140, True)
+turn_left(-45, 30, 'zero')
+gyro_follower_loop_reset(0, 6, 30, 90, True)
+
+#drop turbine
+motor_rear.set_degrees_counted(0)
+motor_rear.run_for_degrees(-180, 20)
+gyro_follower_loop_reset(0, 6, 30, 45, True)
+motor_rear.set_degrees_counted(0)
+motor_rear.run_for_degrees(180, 20)
 
 # M11: Home Delivery
-while get_motor_r()<1350:
-    gyro_follower(1,6,20)
-motor_l_r.stop()
 
-# error correct
-turn_right(4, 18, 'zero')
+# 90 degree turn right
+rev_gyro_follower_loop_reset(0, 6, -30, -60, True) 
+turn_right(135, 30, 'zero')
+gyro_follower_loop_reset(0, 6, 30, 360, True)
+turn_left(-30, 30, 'zero')
+motor_r_reset()
+line_follower_loop(55,.3,30,'right','right',60)
+gyro_follower_loop_reset(0, 6, 30, 220, True)
 
-#follows the line for about 2 and a half rotation on the right part of the line with the right sensor. Then gyro follows for another 270 degrees
-while get_motor_r()<2180:
-    line_follower(55,.3,40,'right','right')
-gyro_reset()
-while get_motor_r()<2400:
-    gyro_follower(0,3,40) #reduce coefficient
-motor_l_r.stop()
 #rotate to drop package accurately
-turn_right(4,20,'zero') #3
+#turn_right(4,20,'zero') #3
+
 #mission package deliver
 motor_front.set_degrees_counted(0)
 motor_front.run_for_degrees(110, 10)
 wait_for_seconds(1)
 #turn back left 
-turn_left(-4,20,'zero')
+#turn_left(-4,20,'zero')
 
 # M09 - Drop down railroad track
 rev_gyro_follower_loop_reset(0, 6, -20, -300, True)
@@ -223,7 +236,7 @@ gyro_follower_loop_reset(0, 6, 40, 360, True)
 
 #back to base
 motor_r_reset()
-while get_motor_r()<950:
+while get_motor_r()<850:
     motor_l_r.start_at_power(75,-15)
 motor_l_r.stop()
 gyro_follower_loop_reset(0, 3, 85, 3450, False)
