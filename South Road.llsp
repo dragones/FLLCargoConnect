@@ -174,7 +174,7 @@ timer.reset()
 
 # M12 Large Delivery
 
-#gyro out of base
+#gyro out of base - line up back of robot with last grid line
 gyro_follower_loop_reset(0, 6, 50, 360, True)
 #stop at chicken(line)
 line_follower_loop(55,.15,40,'right','left',1100)
@@ -187,9 +187,9 @@ line_follower_loop(55,.3,30,'right','left',2300)
 
 #Pivot 90 degrees left
 turn_left(-45, 30,'zero')
-gyro_follower_loop_reset(0, 6, 30, 140, True)
+gyro_follower_loop_reset(0, 6, 30, 145, True)
 turn_left(-45, 30, 'zero')
-gyro_follower_loop_reset(0, 6, 30, 90, True)
+gyro_follower_loop_reset(0, 6, 30, 45, True)
 
 #drop turbine
 motor_rear.set_degrees_counted(0)
@@ -200,34 +200,33 @@ motor_rear.run_for_degrees(180, 20)
 
 # M11: Home Delivery
 
-# 90 degree turn right
+# Go to doorstep
 rev_gyro_follower_loop_reset(0, 6, -30, -60, True) 
 turn_right(135, 30, 'zero')
-gyro_follower_loop_reset(0, 6, 30, 360, True)
-turn_left(-30, 30, 'zero')
+gyro_follower_loop_reset(0, 6, 30, 300, True) #360
+turn_left(-40, 30, 'zero') #-30
+rev_gyro_follower_loop_reset(0, 6, -30, -100, True)
 motor_r_reset()
-line_follower_loop(55,.3,30,'right','right',60)
-gyro_follower_loop_reset(0, 6, 30, 220, True)
+line_follower_loop(55,.25,25,'right','right',200)
+turn_right(10,20,'zero') #3
+gyro_follower_loop_reset(0, 6, 30, 160, True)
 
-#rotate to drop package accurately
-#turn_right(4,20,'zero') #3
-
-#mission package deliver
+# deliver package!
 motor_front.set_degrees_counted(0)
 motor_front.run_for_degrees(110, 10)
 wait_for_seconds(1)
-#turn back left 
-#turn_left(-4,20,'zero')
+motor_front.run_for_degrees(-110, 30)
+turn_left(-3,20,'zero')
 
 # M09 - Drop down railroad track
-rev_gyro_follower_loop_reset(0, 6, -20, -300, True)
+rev_gyro_follower_loop_reset(0, 6, -30, -300, True)
 turn_right(90,30,'zero')
-rev_gyro_follower_loop_reset(0, 6, -30, -425, True)
+rev_gyro_follower_loop_reset(0, 6, -30, -450, True)
 turn_right(80,30,'zero')
 
 # reverse and straighten on black line
 reverse_square_on_line(-30)
-rev_gyro_follower_loop_reset(0, 6, -30, -340, True)
+rev_gyro_follower_loop_reset(0, 6, -30, -330, True)
 
 # drop attachment
 motor_rear.set_degrees_counted(0)
@@ -236,7 +235,7 @@ gyro_follower_loop_reset(0, 6, 40, 360, True)
 
 #back to base
 motor_r_reset()
-while get_motor_r()<850:
+while get_motor_r()<800: #850
     motor_l_r.start_at_power(75,-15)
 motor_l_r.stop()
 gyro_follower_loop_reset(0, 3, 85, 3450, False)
