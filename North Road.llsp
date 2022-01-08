@@ -149,7 +149,7 @@ timer.reset()
 
 # M02: Unused Capacity
 
-gyro_follower_loop_reset(0, 6, 30, 400, True)
+gyro_follower_loop_reset(0, 6, 40, 400, True) #30
 turn_left(-60, 50,'zero')
 turn_right(50, 40,'zero')
 
@@ -157,7 +157,7 @@ turn_right(50, 40,'zero')
 line_follower_loop(55, .3, 30, 'left','left', 1020)
 
 #left turn to plane
-turn_left(-85, 20,'zero')
+turn_left(-85, 25,'zero') #20
 
 # raise & lower the gate
 motor_front.set_degrees_counted(0)
@@ -182,7 +182,7 @@ gyro_follower_loop_reset(-3, 6, 30, 225, True) #-6
 motor_front.set_degrees_counted(0)
 motor_front.run_for_degrees(-100, 45)
 motor_r_reset()
-rev_gyro_follower_loop(0, 6, -30, -650)
+rev_gyro_follower_loop(0, 6, -40, -650) #-30
 gyro_reset()
 turn_right(172, 30,'zero')
 
