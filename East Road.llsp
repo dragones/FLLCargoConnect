@@ -171,7 +171,7 @@ timer.reset()
 # M13: drop off trucks
 gyro_follower_loop(0,6,40,600) #30
 
-line_follower_loop(55, .35, 30, 'right','left', 1200) #30 #1900
+line_follower_loop(55, .35, 30, 'right','left', 1300) #30 #1900
 line_follower_loop(55, .25, 50, 'right','left', 1900) #30 #1900
 
 # M14: drop down bridges
@@ -236,7 +236,7 @@ square_on_line(40) #30
 turn_left(-57,30,'pivot')
 gyro_reset()
 motor_r_reset()
-while get_motor_r()<540:
+while get_motor_r()<600: #540
     gyro_follower(0,6,40)
 square_on_line(30)
 
