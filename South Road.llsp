@@ -179,16 +179,17 @@ gyro_follower_loop_reset(0, 6, 50, 360, True)
 #stop at chicken(line)
 line_follower_loop(55,.15,40,'right','left',1100)
 #line follow around chicken
-turn_left(-45, 30,'zero')
+turn_left(-45, 25,'zero')
 line_follower_loop(55,.4,30,'right','left',1969)
-turn_left(-60, 30,'zero')
+turn_left(-60, 25,'zero')
+
 #contiue line following until holder
 line_follower_loop(55,.3,30,'right','left',2300)
 
 #Pivot 90 degrees left
-turn_left(-45, 30,'zero')
+turn_left(-45, 25,'zero')
 gyro_follower_loop_reset(0, 6, 30, 145, True)
-turn_left(-45, 30, 'zero')
+turn_left(-45, 25, 'zero')
 gyro_follower_loop_reset(0, 6, 30, 45, True)
 
 #drop turbine
@@ -203,11 +204,11 @@ motor_rear.run_for_degrees(180, 20)
 # Go to doorstep
 rev_gyro_follower_loop_reset(0, 6, -30, -60, True) 
 turn_right(135, 30, 'zero')
-gyro_follower_loop_reset(0, 6, 30, 300, True) #360
+gyro_follower_loop_reset(0, 6, 30, 350, True)
 turn_left(-40, 30, 'zero') #-30
 rev_gyro_follower_loop_reset(0, 6, -30, -100, True)
 motor_r_reset()
-line_follower_loop(55,.25,25,'right','right',200)
+line_follower_loop(55,.25,20,'right','right',200)
 turn_right(10,20,'zero') #3
 gyro_follower_loop_reset(0, 6, 30, 160, True)
 
@@ -221,23 +222,24 @@ turn_left(-3,20,'zero')
 # M09 - Drop down railroad track
 rev_gyro_follower_loop_reset(0, 6, -30, -300, True)
 turn_right(90,30,'zero')
-rev_gyro_follower_loop_reset(0, 6, -30, -465, True) #-450
+rev_gyro_follower_loop_reset(0, 6, -30, -465, True)
 turn_right(80,30,'zero')
 
 # reverse and straighten on black line
 reverse_square_on_line(-30)
-rev_gyro_follower_loop_reset(0, 6, -30, -330, True)
+rev_gyro_follower_loop_reset(0, 6, -50, -330, True)
 
 # drop attachment
 motor_rear.set_degrees_counted(0)
 motor_rear.run_for_degrees(-240, 40)
 gyro_follower_loop_reset(0, 6, 40, 360, True)
+motor_rear.run_for_degrees(240, 40) #raise
 
 #back to base
 motor_r_reset()
-while get_motor_r()<800:
+while get_motor_r()<750: #800
     motor_l_r.start_at_power(75,-15)
 motor_l_r.stop()
-gyro_follower_loop_reset(0, 3, 100, 3450, False) #85
+gyro_follower_loop_reset(-1, 3, 100, 3650, False)
 
 #raise SystemExit
